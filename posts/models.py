@@ -25,7 +25,7 @@ class Post(models.Model):
         auto_now_add=True,
     )
     draft = models.BooleanField(
-        default=True,
+        default=False,
     )
     likes = models.ManyToManyField(
         User,
@@ -55,3 +55,8 @@ class Like(models.Model):
     liked_at = models.DateField(
         auto_now_add=True,
     )
+
+    class Meta:
+        # unique_together is defined to make sure, that a user can like a
+        # post only once
+        unique_together = [['post', 'user']]
