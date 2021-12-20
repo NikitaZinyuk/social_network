@@ -7,7 +7,7 @@ User = get_user_model()
 
 class UserActivitySerializer(serializers.ModelSerializer):
 
-    last_request_at = serializers.DateTimeField(source='activity.last_request_at')
+    last_request_at = serializers.DateTimeField(source='accounts.last_request_at')
 
     class Meta:
         model = User

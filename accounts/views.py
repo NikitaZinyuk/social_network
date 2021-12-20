@@ -4,7 +4,7 @@ from rest_framework.generics import RetrieveAPIView
 from .serializers import UserActivitySerializer
 
 
-User= get_user_model()
+User = get_user_model()
 
 
 class UserActivityRetrieveApiView(RetrieveAPIView):
