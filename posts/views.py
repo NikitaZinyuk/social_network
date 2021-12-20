@@ -1,26 +1,25 @@
 from django.db.models import Count
-from rest_framework import permissions
+from rest_framework import permissions as rest_framework_permissions
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
-from rest_framework.generics import ListAPIView
-from django_filters import rest_framework as filters
+from rest_framework import viewsets
+from rest_framework import generics
+from django_filters import rest_framework as rest_framework_filters
 
-from .filters import LikeFilter
-from .permissions import IsPostOwner
-from .serializers import (
+from posts import filters
+from posts import permissions
+from posts.serializers import (
     PostSerializer,
     CreatePostSerializer,
     UpdatePostSerializer,
     CreateLikeSerializer
 )
-from .models import Post, Like
+from posts import models
 
 
-class PostModelViewSet(ModelViewSet):
+class PostModelViewSet(viewsets.ModelViewSet):
 
-    queryset = Post.objects.filter(draft=False)
-    permission_classes = (IsPostOwner,)
+    queryset = models.Post.objects.filter(draft=False)
+    permission_classes = (permissions.IsPostOwner,)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -35,20 +34,18 @@ class PostModelViewSet(ModelViewSet):
         return context
 
 
-class LikeModelViewSet(CreateModelMixin, DestroyModelMixin, GenericViewSet):
-    """As we need only create and delete like object, we inherit two
-    mixins for these actions and GenericViewSet"""
+class LikeModelViewSet(viewsets.ModelViewSet):
 
     serializer_class = CreateLikeSerializer
-    queryset = Like.objects.all()
-    permission_classes = (permissions.IsAuthenticated,)
+    queryset = models.Like.objects.all()
+    permission_classes = (rest_framework_permissions.IsAuthenticated,)
 
 
-class LikeListApiView(ListAPIView):
+class LikeListApiView(generics.ListAPIView):
 
-    queryset = Like.objects.all()
-    filter_backends = (filters.DjangoFilterBackend,)
-    filterset_class = LikeFilter
+    queryset = models.Like.objects.all()
+    filter_backends = (rest_framework_filters.DjangoFilterBackend,)
+    filterset_class = filters.LikeFilter
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())

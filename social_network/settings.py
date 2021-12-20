@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_filters',
 
     'posts',
+    'activity',
 ]
 
 MIDDLEWARE = [
@@ -53,9 +54,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'activity.middleware.ActivityMiddleware'
 ]
 
-ROOT_URLCONF = 'blog.urls'
+ROOT_URLCONF = 'social_network.urls'
 
 TEMPLATES = [
     {
@@ -73,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'blog.wsgi.application'
+WSGI_APPLICATION = 'social_network.wsgi.application'
 
 
 # Database
