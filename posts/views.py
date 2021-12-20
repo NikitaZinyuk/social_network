@@ -8,9 +8,7 @@ from django_filters import rest_framework as rest_framework_filters
 from posts import filters
 from posts import permissions
 from posts.serializers import (
-    PostSerializer,
-    CreatePostSerializer,
-    UpdatePostSerializer,
+    PostsSerializer,
     CreateLikeSerializer
 )
 from posts import models
@@ -19,19 +17,11 @@ from posts import models
 class PostModelViewSet(viewsets.ModelViewSet):
 
     queryset = models.Post.objects.filter(draft=False)
-    permission_classes = (permissions.IsPostOwner,)
+    permission_classes = (permissions.IsAuthorOrReadOnly,)
+    serializer_class = PostsSerializer
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return CreatePostSerializer
-        if self.request.method in ('PUT', 'PATCH'):
-            return UpdatePostSerializer
-        return PostSerializer
-
-    def get_serializer_context(self):
-        context = super(PostModelViewSet, self).get_serializer_context()
-        context.update({'user': self.request.user})
-        return context
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
 
 class LikeModelViewSet(viewsets.ModelViewSet):
