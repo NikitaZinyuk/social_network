@@ -9,8 +9,8 @@ User = get_user_model()
 
 class PostsSerializer(serializers.ModelSerializer):
 
+    author = serializers.ReadOnlyField(source='author.get_full_name')
     likes_amount = serializers.SerializerMethodField()
-    liked_by_current_user = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -20,21 +20,14 @@ class PostsSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'likes_amount',
-            'liked_by_current_user'
         )
         read_only_fields = ('author',)
 
     def get_likes_amount(self, obj):
         return obj.likes.count()
 
-    def get_liked_by_current_user(self, obj):
-        user = self.context.get('user')
-        if user and user.is_authenticated:
-            return user in obj.likes.all()
-        return False
 
-
-class CreateLikeSerializer(serializers.ModelSerializer):
+class LikesSerializer(serializers.ModelSerializer):
 
     post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
@@ -43,5 +36,5 @@ class CreateLikeSerializer(serializers.ModelSerializer):
         model = Like
         fields = (
             'post',
-            'user'
+            'user',
         )

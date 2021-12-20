@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
+from django.db.models import Count
 
 User = get_user_model()
 
@@ -18,9 +18,6 @@ class Post(models.Model):
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
-    )
-    draft = models.BooleanField(
-        default=False,
     )
     likes = models.ManyToManyField(
         User,

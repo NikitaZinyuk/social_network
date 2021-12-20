@@ -10,6 +10,5 @@ class LikeInline(admin.TabularInline):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     inlines = (LikeInline,)
-    list_display = ('title', 'author', 'draft', 'created_at')
-    list_editable = ('draft',)
-    list_filter = ('created_at', 'draft')
+    list_display = ('title', 'author', 'created_at')
+    list_filter = ('created_at',)

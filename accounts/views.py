@@ -7,7 +7,7 @@ from .serializers import UserActivitySerializer
 User = get_user_model()
 
 
-class UserActivityRetrieveApiView(RetrieveAPIView):
+class UserActivityApiView(RetrieveAPIView):
 
     serializer_class = UserActivitySerializer
     queryset = User.objects.all()

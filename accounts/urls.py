@@ -1,11 +1,11 @@
 from django.urls import path
 
 
-from .views import UserActivityRetrieveApiView
+from .views import UserActivityApiView
 
 
 urlpatterns = [
-    path('user_activity/<int:pk>/', UserActivityRetrieveApiView.as_view(),
+    path('user_activity/<int:pk>/', UserActivityApiView.as_view(),
          name='user_activity')
 ]
 
